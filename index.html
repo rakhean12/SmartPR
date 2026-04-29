@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartPR – Platform Penjadwalan PR Sekolah</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: { DEFAULT: '#4F46E5', light: '#818CF8', dark: '#3730A3' },
+            accent:  { DEFAULT: '#7C3AED', light: '#A78BFA' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .gradient-hero { background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%); }
+    .card-hover { transition: transform .2s, box-shadow .2s; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(79,70,229,.15); }
+    .spinner { border: 3px solid #e0e7ff; border-top-color: #4F46E5; border-radius: 50%; width: 28px; height: 28px; animation: spin .7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .badge-rendah  { background:#dcfce7; color:#166534; }
+    .badge-sedang  { background:#fef9c3; color:#854d0e; }
+    .badge-tinggi  { background:#fee2e2; color:#991b1b; }
+    .badge-selesai { background:#d1fae5; color:#065f46; }
+    .badge-belum   { background:#fee2e2; color:#991b1b; }
+    #toast { transition: opacity .4s, transform .4s; }
+  </style>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800">
+
+<!-- ===== NAVBAR ===== -->
+<nav class="bg-white shadow-sm sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+    <a href="#beranda" class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-lg gradient-hero flex items-center justify-center">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+        </svg>
+      </div>
+      <span class="text-xl font-bold text-primary">SmartPR</span>
+    </a>
+
+    <!-- Desktop Menu -->
+    <ul class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
+      <li><a href="#beranda"   class="hover:text-primary transition">Beranda</a></li>
+      <li><a href="#jadwal"    class="hover:text-primary transition">Jadwal PR</a></li>
+      <li><a href="#kalender"  class="hover:text-primary transition">Kalender</a></li>
+      <li><a href="#statistik" class="hover:text-primary transition">Statistik</a></li>
+      <li><a href="#tentang"   class="hover:text-primary transition">Tentang</a></li>
+    </ul>
+
+    <!-- Mobile Hamburger -->
+    <button id="menuBtn" class="md:hidden p-2 rounded-lg hover:bg-slate-100">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="hidden md:hidden bg-white border-t px-4 pb-4">
+    <ul class="flex flex-col gap-3 pt-3 text-sm font-medium text-slate-600">
+      <li><a href="#beranda"   onclick="closeMobile()" class="block hover:text-primary">Beranda</a></li>
+      <li><a href="#jadwal"    onclick="closeMobile()" class="block hover:text-primary">Jadwal PR</a></li>
+      <li><a href="#kalender"  onclick="closeMobile()" class="block hover:text-primary">Kalender</a></li>
+      <li><a href="#statistik" onclick="closeMobile()" class="block hover:text-primary">Statistik</a></li>
+      <li><a href="#tentang"   onclick="closeMobile()" class="block hover:text-primary">Tentang</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section id="beranda" class="gradient-hero text-white py-20 px-4">
+  <div class="max-w-4xl mx-auto text-center">
+    <span class="inline-block bg-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full mb-4 tracking-wide">
+      📚 Platform Penjadwalan PR Sekolah
+    </span>
+    <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-4">
+      Kelola PR Lebih Mudah<br/>dan Teratur
+    </h1>
+    <p class="text-indigo-100 text-lg mb-8 max-w-xl mx-auto">
+      Catat tugas, pantau deadline, dan lacak progress belajarmu dalam satu platform yang simpel dan modern.
+    </p>
+    <div class="flex flex-wrap justify-center gap-3">
+      <a href="#form-pr"
+        class="bg-white text-primary font-semibold px-6 py-3 rounded-xl shadow hover:shadow-lg hover:bg-indigo-50 transition">
+        ➕ Tambah PR
+      </a>
+      <a href="#jadwal"
+        class="border border-white/60 text-white font-semibold px-6 py-3 rounded-xl hover:bg-white/10 transition">
+        📋 Lihat Jadwal
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STATISTIK ===== -->
+<section id="statistik" class="max-w-7xl mx-auto px-4 -mt-8">
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div class="bg-white rounded-2xl shadow-md p-5 card-hover text-center">
+      <div class="text-3xl font-extrabold text-primary" id="statTotal">–</div>
+      <div class="text-sm text-slate-500 mt-1">Total Tugas</div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-md p-5 card-hover text-center">
+      <div class="text-3xl font-extrabold text-emerald-500" id="statSelesai">–</div>
+      <div class="text-sm text-slate-500 mt-1">Selesai</div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-md p-5 card-hover text-center">
+      <div class="text-3xl font-extrabold text-rose-500" id="statBelum">–</div>
+      <div class="text-sm text-slate-500 mt-1">Belum Selesai</div>
+    </div>
+    <div class="bg-white rounded-2xl shadow-md p-5 card-hover text-center">
+      <div class="text-sm font-bold text-amber-500" id="statDeadline">–</div>
+      <div class="text-sm text-slate-500 mt-1">Deadline Terdekat</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FORM TAMBAH PR ===== -->
+<section id="form-pr" class="max-w-4xl mx-auto px-4 mt-10">
+  <div class="bg-white rounded-2xl shadow-md p-6 md:p-8">
+    <h2 class="text-2xl font-bold text-slate-800 mb-1">
+      <span id="formTitle">➕ Tambah PR Baru</span>
+    </h2>
+    <p class="text-slate-500 text-sm mb-6">Isi form di bawah untuk mencatat tugas baru.</p>
+
+    <input type="hidden" id="editId" value="" />
+
+    <div class="grid md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">Nama Tugas *</label>
+        <input id="nama" type="text" placeholder="Contoh: Laporan Fisika Bab 3"
+          class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/40 transition" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">Mata Pelajaran *</label>
+        <input id="mapel" type="text" placeholder="Contoh: Fisika"
+          class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/40 transition" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">Deadline *</label>
+        <input id="deadline" type="date"
+          class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/40 transition" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">Prioritas</label>
+        <select id="prioritas"
+          class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/40 transition bg-white">
+          <option value="Rendah">🟢 Rendah</option>
+          <option value="Sedang" selected>🟡 Sedang</option>
+          <option value="Tinggi">🔴 Tinggi</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-slate-700 mb-1">Status</label>
+        <select id="status"
+          class="w-full border border-slate-200 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-primary/40 transition bg-white">
+          <option value="Belum">⏳ Belum Selesai</option>
+          <option value="Selesai">✅ Selesai</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="flex gap-3 mt-6">
+      <button onclick="simpanData()"
+        class="gradient-hero text-white font-semibold px-6 py-2.5 rounded-xl hover:opacity-90 transition flex items-center gap-2" id="btnSimpan">
+        <span>💾 Simpan</span>
+      </button>
+      <button onclick="batalEdit()" id="btnBatal"
+        class="hidden border border-slate-300 text-slate-600 font-semibold px-6 py-2.5 rounded-xl hover:bg-slate-50 transition">
+        Batal
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TABEL JADWAL PR ===== -->
+<section id="jadwal" class="max-w-7xl mx-auto px-4 mt-10">
+  <div class="bg-white rounded-2xl shadow-md p-6 md:p-8">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+      <h2 class="text-2xl font-bold text-slate-800">📋 Jadwal PR</h2>
+      <div class="flex flex-wrap gap-2">
+        <input id="searchInput" type="text" placeholder="🔍 Cari tugas..."
+          oninput="filterTabel()"
+          class="border border-slate-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 w-48" />
+        <select id="filterStatus" onchange="filterTabel()"
+          class="border border-slate-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/40">
+          <option value="">Semua Status</option>
+          <option value="Belum">Belum Selesai</option>
+          <option value="Selesai">Selesai</option>
+        </select>
+        <select id="filterPrioritas" onchange="filterTabel()"
+          class="border border-slate-200 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary/40">
+          <option value="">Semua Prioritas</option>
+          <option value="Rendah">Rendah</option>
+          <option value="Sedang">Sedang</option>
+          <option value="Tinggi">Tinggi</option>
+        </select>
+        <button onclick="loadData()"
+          class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-medium px-4 py-2 rounded-xl transition">
+          🔄 Refresh
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <div id="loadingState" class="flex justify-center py-12">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden text-center py-12 text-slate-400">
+      <div class="text-5xl mb-3">📭</div>
+      <p class="font-medium">Belum ada tugas. Yuk tambah PR pertamamu!</p>
+    </div>
+
+    <!-- Table -->
+    <div id="tableWrapper" class="hidden overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-slate-50 text-slate-500 text-left">
+            <th class="px-4 py-3 rounded-l-xl font-semibold">No</th>
+            <th class="px-4 py-3 font-semibold">Nama Tugas</th>
+            <th class="px-4 py-3 font-semibold">Mata Pelajaran</th>
+            <th class="px-4 py-3 font-semibold">Deadline</th>
+            <th class="px-4 py-3 font-semibold">Prioritas</th>
+            <th class="px-4 py-3 font-semibold">Status</th>
+            <th class="px-4 py-3 rounded-r-xl font-semibold text-center">Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="dataTabel" class="divide-y divide-slate-100"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== KALENDER MINI ===== -->
+<section id="kalender" class="max-w-7xl mx-auto px-4 mt-10">
+  <div class="bg-white rounded-2xl shadow-md p-6 md:p-8">
+    <h2 class="text-2xl font-bold text-slate-800 mb-6">📅 Kalender Deadline</h2>
+    <div class="flex items-center justify-between mb-4">
+      <button onclick="prevMonth()" class="p-2 rounded-xl hover:bg-slate-100 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <h3 id="calTitle" class="text-lg font-bold text-slate-700"></h3>
+      <button onclick="nextMonth()" class="p-2 rounded-xl hover:bg-slate-100 transition">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        </svg>
+      </button>
+    </div>
+    <div class="grid grid-cols-7 gap-1 text-center text-xs font-semibold text-slate-400 mb-2">
+      <div>Min</div><div>Sen</div><div>Sel</div><div>Rab</div>
+      <div>Kam</div><div>Jum</div><div>Sab</div>
+    </div>
+    <div id="calGrid" class="grid grid-cols-7 gap-1"></div>
+
+    <!-- Deadline list -->
+    <div id="deadlineList" class="mt-6 space-y-2"></div>
+  </div>
+</section>
+
+<!-- ===== TENTANG ===== -->
+<section id="tentang" class="max-w-4xl mx-auto px-4 mt-10 mb-16">
+  <div class="bg-white rounded-2xl shadow-md p-6 md:p-8 text-center">
+    <div class="w-16 h-16 rounded-2xl gradient-hero flex items-center justify-center mx-auto mb-4">
+      <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+      </svg>
+    </div>
+    <h2 class="text-2xl font-bold text-slate-800 mb-2">SmartPR</h2>
+    <p class="text-slate-500 max-w-lg mx-auto">
+      Platform penjadwalan PR sekolah yang membantu siswa mencatat tugas, memantau deadline,
+      dan melacak progress belajar secara efisien. Data tersimpan di Google Spreadsheet
+      sehingga bisa diakses dari mana saja.
+    </p>
+    <div class="mt-6 flex flex-wrap justify-center gap-3 text-sm text-slate-500">
+      <span class="bg-slate-100 px-3 py-1 rounded-full">📊 Google Spreadsheet</span>
+      <span class="bg-slate-100 px-3 py-1 rounded-full">⚡ Google Apps Script</span>
+      <span class="bg-slate-100 px-3 py-1 rounded-full">🎨 Tailwind CSS</span>
+      <span class="bg-slate-100 px-3 py-1 rounded-full">📱 Mobile Friendly</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="bg-slate-800 text-slate-400 text-center py-6 text-sm">
+  <p>© 2025 <span class="text-white font-semibold">SmartPR</span> – Platform Penjadwalan PR Sekolah</p>
+</footer>
+
+<!-- ===== MODAL KONFIRMASI HAPUS ===== -->
+<div id="modalHapus" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4">
+  <div class="bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full">
+    <div class="text-4xl text-center mb-3">🗑️</div>
+    <h3 class="text-lg font-bold text-center text-slate-800 mb-2">Hapus Tugas?</h3>
+    <p class="text-slate-500 text-sm text-center mb-6">Tindakan ini tidak bisa dibatalkan.</p>
+    <div class="flex gap-3">
+      <button onclick="tutupModal()"
+        class="flex-1 border border-slate-300 text-slate-600 font-semibold py-2.5 rounded-xl hover:bg-slate-50 transition">
+        Batal
+      </button>
+      <button onclick="konfirmasiHapus()"
+        class="flex-1 bg-rose-500 text-white font-semibold py-2.5 rounded-xl hover:bg-rose-600 transition">
+        Hapus
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TOAST NOTIFIKASI ===== -->
+<div id="toast"
+  class="fixed bottom-6 right-6 bg-slate-800 text-white text-sm font-medium px-5 py-3 rounded-xl shadow-lg opacity-0 translate-y-4 pointer-events-none z-50">
+  ✅ Berhasil disimpan
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

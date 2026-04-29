@@ -4,7 +4,7 @@
 //  yang sudah kamu deploy sebagai Web App.
 // ============================================================
 
-const API_URL = "PASTE_URL_GOOGLE_SCRIPT_DISINI";
+const API_URL = "https://script.google.com/macros/s/AKfycbwG3RYO9G_X7EErzQB5ZfgQU-eHp3j9frS5bY4DX5IqZnY0oAqldXQijfetj7qrKW49kQ/exec";
 
 // ── State ────────────────────────────────────────────────────
 let semuaData   = [];   // cache data dari spreadsheet
